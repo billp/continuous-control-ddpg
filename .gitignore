@@ -1,0 +1,12 @@
+# Unity environment binary (download separately — large, redistributable asset)
+Reacher_Linux_NoVis/
+# crash dumps / logs
+core
+unity-environment.log
+*.log
+# python cruft
+**/__pycache__/
+*.pyc
+*.egg-info/
+build/
+.ipynb_checkpoints/
