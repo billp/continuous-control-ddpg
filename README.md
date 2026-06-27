@@ -22,6 +22,37 @@ Trained weights: `checkpoint_actor.pth`, `checkpoint_critic.pth`. Scores: `score
 | Reward | +0.1 per step the hand is in the target location |
 | Solved | avg ≥ 30 over 100 episodes |
 
+## Getting Started (dependencies + environment)
+
+**1. Download the Unity Reacher (20-agent) environment** for your OS (it is *not* in this repo):
+
+| OS | Link |
+|---|---|
+| Linux | https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux.zip |
+| Linux (headless / no-vis) | https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Linux_NoVis.zip |
+| macOS | https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher.app.zip |
+| Windows (64-bit) | https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/Reacher_Windows_x86_64.zip |
+
+Unzip it into this folder (e.g. `Reacher_Linux_NoVis/`) and set the path in `train.py` /
+`test_env.py` (`BINARY = ".../Reacher.x86_64"`).
+
+**2. Install dependencies** — two options:
+
+- **Docker (recommended, reproducible):** the provided `Dockerfile` builds a `linux/amd64` image
+  with Python 3.6, the pinned ML-Agents v0.4 stack (`protobuf==3.6.1`, `grpcio==1.11.0`) and PyTorch:
+  ```bash
+  docker build -t reacher-ddpg .
+  docker run --rm reacher-ddpg python test_env.py      # smoke test (env connects)
+  docker run -d --name reacher-train reacher-ddpg python train.py 200
+  docker cp reacher-train:/app/checkpoint_actor.pth .  # retrieve trained weights
+  ```
+- **Local pip:** `pip install -r requirements.txt` then `pip install torch`, and run
+  `python train.py`. Requires **x86_64 Linux** (the Unity binary is x86/Mono — see the note below;
+  it does **not** run on Apple-Silicon Macs).
+
+**3. Use the trained agent:** `checkpoint_actor.pth` / `checkpoint_critic.pth` hold the solved
+weights — load them into `Agent` (see `train_continue.py` for the load pattern).
+
 ## Learning Algorithm — DDPG
 
 Actor–critic, off-policy, for continuous control:
